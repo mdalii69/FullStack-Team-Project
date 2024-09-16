@@ -1,0 +1,9 @@
+//For downloading node moddules write "npm install" in terminal
+
+* Main Folder
+--> public
+    --> index.html
+    --> style.css
+--> package.json
+--> server.js
+
