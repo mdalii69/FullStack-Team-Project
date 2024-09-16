@@ -4,6 +4,7 @@
 --> public
     --> index.html
     --> style.css
+    --> script.js
 --> package.json
 --> server.js
 
