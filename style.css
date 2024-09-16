@@ -11,6 +11,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -61,4 +62,45 @@ button {
 
 button:hover {
     background-color: #45a049;
+}
+
+/* Light and Dark Mode Styles */
+body.dark {
+    background-color: #333;
+    color: #fff;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+/* Change icon colors for better visibility in dark mode */
+body.dark .theme-toggle {
+    color: #fff;
+}
+
+/* Password Strength Indicator Styles */
+.password-strength {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #fff;
+}
+
+/* Strength levels */
+.password-strength.weak {
+    color: red;
+}
+
+.password-strength.medium {
+    color: orange;
+}
+
+.password-strength.strong {
+    color: green;
 }
