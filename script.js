@@ -17,13 +17,15 @@ themeIcon.addEventListener('click', () => {
 });
 
 // Password strength indicator
-passwordInput.addEventListener('input', () => {
-    const password = passwordInput.value;
-    const strength = checkPasswordStrength(password);
+if (passwordInput) {
+    passwordInput.addEventListener('input', () => {
+        const password = passwordInput.value;
+        const strength = checkPasswordStrength(password);
 
-    strengthIndicator.textContent = strength.text;
-    strengthIndicator.className = `password-strength ${strength.class}`;
-});
+        strengthIndicator.textContent = strength.text;
+        strengthIndicator.className = `password-strength ${strength.class}`;
+    });
+}
 
 function checkPasswordStrength(password) {
     let strength = { text: 'Weak', class: 'weak' };
@@ -41,4 +43,77 @@ function checkPasswordStrength(password) {
     }
 
     return strength;
+}
+
+// Handle login form submission
+if (document.getElementById('loginForm')) {
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault(); // Prevent the default form submission
+
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData);
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Redirect to dashboard on successful login
+                window.location.href = result.redirect;
+            } else {
+                // Show an alert with the error message
+                alert(result.message || 'An error occurred. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An unexpected error occurred. Please try again later.');
+        }
+    });
+}
+
+// Handle registration form submission
+if (document.getElementById('registrationForm')) {
+    document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+        e.preventDefault(); // Prevent the default form submission
+
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData);
+
+        // Check if passwords match
+        if (data.password !== data.confirm_password) {
+            alert('Passwords do not match.');
+            return; // Stop form submission if passwords do not match
+        }
+
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Show success message and redirect
+                alert(result.message);
+                window.location.href = result.redirect; // Redirect to login page
+            } else {
+                // Show an alert with the error message
+                alert(result.message || 'An error occurred. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An unexpected error occurred. Please try again later.');
+        }
+    });
 }
