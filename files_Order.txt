@@ -3,8 +3,11 @@
 * Main Folder
 --> public
     --> index.html
+    --> dashboard.html
+    --> login.html
     --> style.css
     --> script.js
 --> package.json
 --> server.js
+
 
