@@ -1,16 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const validator = require('validator'); // Add validator for validation
+const validator = require('validator');
+const bcrypt = require('bcrypt');
+require('dotenv').config();
+
 const app = express();
 
 // Middleware to parse incoming form data
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); // To parse JSON bodies
 
 // Serve static files from the 'public' folder
 app.use(express.static('public'));
 
-// Connect to MongoDB (replace <username>, <password>, and <dbname> with your own values)
+// Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/user_registration', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -40,6 +44,16 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+// Serve the HTML login form
+app.get('/login', (req, res) => {
+    res.sendFile(__dirname + '/public/login.html');
+});
+
+// Serve the dashboard page
+app.get('/dashboard', (req, res) => {
+    res.sendFile(__dirname + '/public/dashboard.html');
+});
+
 // Validate password strength
 const validatePasswordStrength = (password) => {
     const hasUpperCase = /[A-Z]/.test(password);
@@ -49,34 +63,62 @@ const validatePasswordStrength = (password) => {
     return password.length >= 8 && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar;
 };
 
-// Handle form submission
+// Handle registration form submission
 app.post('/register', async (req, res) => {
     const { name, email, password, confirm_password } = req.body;
 
-    // Check if password matches confirmation password
     if (password !== confirm_password) {
-        return res.status(400).send('Passwords do not match.');
+        return res.status(400).json({ message: 'Passwords do not match.' });
     }
 
-    // Validate password strength
     if (!validatePasswordStrength(password)) {
-        return res.status(400).send('Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.');
+        return res.status(400).json({ message: 'Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.' });
     }
-
-    // Create a new user object
-    const newUser = new User({
-        name,
-        email,
-        password
-    });
 
     try {
-        // Save the user to the database
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new User({
+            name,
+            email: validator.normalizeEmail(email),
+            password: hashedPassword
+        });
+
         await newUser.save();
-        res.send('Registration successful!');
+        res.status(200).json({ message: 'Successfully registered.', redirect: '/login' }); // Send success response with redirect URL
     } catch (err) {
-        res.status(400).send('Error: Unable to register user. Email may already be registered.');
+        res.status(400).json({ message: 'Unable to register user. Email may already be registered.' });
     }
+});
+
+// Handle login form submission
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid email or password.' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid email or password.' });
+        }
+
+        // Successful login
+        res.status(200).json({ redirect: '/dashboard' }); // Send JSON response for redirection
+    } catch (err) {
+        res.status(500).json({ message: 'Server error. Please try again later.' });
+    }
+});
+
+// Centralized error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Something went wrong!' });
 });
 
 // Start the server
