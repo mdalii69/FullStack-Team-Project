@@ -3,50 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
+    <title>Alumni Connect</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
-    <!-- Icon Toggle for Light/Dark Mode -->
-    <div class="theme-toggle">
-        <span id="themeIcon" class="icon">🌙</span>
-    </div>
-
-    <div class="container mt-5">
-        <h2 class="text-center">Registration Form</h2>
-        <form id="registrationForm" action="/register" method="post">
-            <!-- Form fields -->
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
-                <div id="password-strength" class="password-strength"></div>
-            </div>
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password</label>
-                <input type="password" id="confirm-password" name="confirm_password" class="form-control" placeholder="Confirm your password" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Register</button>
-        </form>
-        <div class="text-center mt-3">
-            <a href="/login">Already have an account? Log in</a>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Alumni Connect</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="#events">Events</a></li>
+                <li class="nav-item"><a class="nav-link" href="#jobs">Job Board</a></li>
+                <li class="nav-item"><a class="nav-link" href="#news">News</a></li>
+                <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link" href="#Login/Signup">Contact</a></li>
+            </ul>
         </div>
-    </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="jumbotron text-center">
+        <h1>Welcome to Alumni Connect</h1>
+        <p>Reconnect with old friends, network with professionals, and stay updated with alumni events!</p>
+        <a href="register.html" class="btn btn-primary btn-lg">Join Now</a> <!-- Updated href -->
+    </header>
+
+    <!-- Success Stories Section -->
+    <section id="success-stories" class="container py-5">
+        <h2 class="text-center">Alumni Success Stories</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="images/Alumni_1.jpeg" class="card-img-top" alt="Alumni 1">
+                    <div class="card-body">
+                        <h5 class="card-title">John Doe</h5>
+                        <p class="card-text">CEO of XYZ Corp. - "Being part of the alumni network opened many doors for me."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="images/Alumni_2.jpeg" class="card-img-top" alt="Alumni 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Jane Smith</h5>
+                        <p class="card-text">CTO at ABC Inc. - "Networking with other alumni was crucial for my career growth."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="images/Alumni_3.jpeg" class="card-img-top" alt="Alumni 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Sam Johnson</h5>
+                        <p class="card-text">Founder of DEF Startup - "The support from my alumni network was incredible!"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Section -->
+    <section id="events" class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center">Upcoming Events</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Annual Alumni Reunion</h4>
+                    <p>Date: October 15, 2024</p>
+                    <p>Location: University Campus</p>
+                </div>
+                <div class="col-md-6">
+                    <h4>Webinar: Careers in Tech</h4>
+                    <p>Date: November 3, 2024</p>
+                    <p>Online Event</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Job Board Section -->
+    <section id="jobs" class="container py-5">
+        <h2 class="text-center">Job Board</h2>
+        <p class="text-center">Explore career opportunities shared by our alumni community.</p>
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Software Engineer - Google</h4>
+                <p>Location: Mountain View, CA</p>
+            </div>
+            <div class="col-md-4">
+                <h4>Data Scientist - Amazon</h4>
+                <p>Location: Seattle, WA</p>
+            </div>
+            <div class="col-md-4">
+                <h4>Product Manager - Microsoft</h4>
+                <p>Location: Redmond, WA</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center">What Alumni Say</h2>
+            <blockquote class="blockquote text-center">
+                <p class="mb-0">"Joining the alumni network was the best decision for my career. The support and connections are invaluable."</p>
+                <footer class="blockquote-footer">John Doe, Class of 2015</footer>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="Login/Signup" class="container py-5">
+        <h2 class="text-center">Get in Touch</h2>
+        <p class="text-center">Contact us to learn more about the alumni network or to get involved.</p>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Email</h4>
+                <p>alumni@university.edu</p>
+            </div>
+            <div class="col-md-6">
+                <h4>Phone</h4>
+                <p>+1 123-456-7890</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-3 bg-dark text-white">
+        <p>&copy; 2024 Alumni Connect. All rights reserved.</p>
+    </footer>
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
-    <script src="script.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
