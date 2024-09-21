@@ -5,7 +5,6 @@ const strengthIndicator = document.getElementById('password-strength');
 
 // Default is light mode, so we start with the moon icon
 themeIcon.addEventListener('click', () => {
-    // Toggle the 'dark' class on the body
     body.classList.toggle('dark');
 
     // Toggle the icon between sun and moon
@@ -115,5 +114,14 @@ if (document.getElementById('registrationForm')) {
             console.error('Error:', error);
             alert('An unexpected error occurred. Please try again later.');
         }
+    });
+}
+
+// Handle Join Now button click
+const joinNowButton = document.querySelector('a.btn.btn-primary'); // Select the Join Now button
+if (joinNowButton) {
+    joinNowButton.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent default anchor behavior
+        window.location.href = 'register.html'; // Redirect to the registration page
     });
 }
