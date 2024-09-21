@@ -1,4 +1,3 @@
-/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +14,6 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Container Styles */
 .container {
     background-color: #fff;
     padding: 20px;
@@ -24,14 +22,12 @@ body {
     width: 300px;
 }
 
-/* Headings */
 h2 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
 }
 
-/* Form Styles */
 .form-group {
     margin-bottom: 15px;
 }
@@ -50,14 +46,8 @@ input[type="password"] {
     border: 1px solid #ccc;
     border-radius: 5px;
     outline: none;
-    transition: border-color 0.3s ease;
 }
 
-input:focus {
-    border-color: #4CAF50;
-}
-
-/* Button Styles */
 button {
     width: 100%;
     padding: 10px;
@@ -80,10 +70,6 @@ body.dark {
     color: #fff;
 }
 
-.container.dark {
-    background-color: #444;
-}
-
 /* Theme Toggle Button */
 .theme-toggle {
     position: absolute;
@@ -94,6 +80,7 @@ body.dark {
     transition: color 0.3s ease;
 }
 
+/* Change icon colors for better visibility in dark mode */
 body.dark .theme-toggle {
     color: #fff;
 }
@@ -102,6 +89,7 @@ body.dark .theme-toggle {
 .password-strength {
     margin-top: 5px;
     font-size: 14px;
+    color: #fff;
 }
 
 /* Strength levels */
@@ -115,16 +103,4 @@ body.dark .theme-toggle {
 
 .password-strength.strong {
     color: green;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .container {
-        width: 90%;
-        padding: 15px;
-    }
-
-    button {
-        font-size: 14px;
-    }
 }
