@@ -15,15 +15,15 @@ app.use(bodyParser.json()); // To parse JSON bodies
 app.use(express.static('public'));
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/user_registration', {
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/user_registration', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.log('Error: ', err));
+  .catch(err => console.error('Error connecting to MongoDB:', err));
 
 // User Schema
 const userSchema = new mongoose.Schema({
-    name: String,
+    name: { type: String, required: true },
     email: {
         type: String,
         required: true,
@@ -39,20 +39,11 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// Serve the HTML registration form
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
-});
-
-// Serve the HTML login form
-app.get('/login', (req, res) => {
-    res.sendFile(__dirname + '/public/login.html');
-});
-
-// Serve the dashboard page
-app.get('/dashboard', (req, res) => {
-    res.sendFile(__dirname + '/public/dashboard.html');
-});
+// Serve HTML files
+app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
+app.get('/register', (req, res) => res.sendFile(__dirname + '/public/register.html'));
+app.get('/login', (req, res) => res.sendFile(__dirname + '/public/login.html'));
+app.get('/dashboard', (req, res) => res.sendFile(__dirname + '/public/dashboard.html'));
 
 // Validate password strength
 const validatePasswordStrength = (password) => {
@@ -63,7 +54,7 @@ const validatePasswordStrength = (password) => {
     return password.length >= 8 && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar;
 };
 
-// Handle registration form submission
+// Handle registration
 app.post('/register', async (req, res) => {
     const { name, email, password, confirm_password } = req.body;
 
@@ -72,12 +63,11 @@ app.post('/register', async (req, res) => {
     }
 
     if (!validatePasswordStrength(password)) {
-        return res.status(400).json({ message: 'Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.' });
+        return res.status(400).json({ message: 'Password must be at least 8 characters long and include uppercase, lowercase, numbers, and special characters.' });
     }
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-
         const newUser = new User({
             name,
             email: validator.normalizeEmail(email),
@@ -85,31 +75,29 @@ app.post('/register', async (req, res) => {
         });
 
         await newUser.save();
-        res.status(200).json({ message: 'Successfully registered.', redirect: '/login' }); // Send success response with redirect URL
+        res.status(201).json({ message: 'Successfully registered.', redirect: '/login' });
     } catch (err) {
-        res.status(400).json({ message: 'Unable to register user. Email may already be registered.' });
+        res.status(400).json({ message: 'Registration failed. Email may already be registered.' });
     }
 });
 
-// Handle login form submission
+// Handle login
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
         const user = await User.findOne({ email });
-
         if (!user) {
             return res.status(400).json({ message: 'Invalid email or password.' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
-
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid email or password.' });
         }
 
         // Successful login
-        res.status(200).json({ redirect: '/dashboard' }); // Send JSON response for redirection
+        res.status(200).json({ redirect: '/dashboard' });
     } catch (err) {
         res.status(500).json({ message: 'Server error. Please try again later.' });
     }
@@ -117,12 +105,12 @@ app.post('/login', async (req, res) => {
 
 // Centralized error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.error('Error:', err.message);
     res.status(500).json({ message: 'Something went wrong!' });
 });
 
 // Start the server
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
